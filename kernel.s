@@ -8,14 +8,15 @@
 Reset ; this is $F000
 
 ; Now let's reset the cpu!
-	lda #0
-	ldx #0
+	ldx #0 ; x = 0
+	txs    ; sp = 0, because sp = x
+	pha    ; 
 Clear
-	sta 0,x
-	inx
+	pha
+	dex
 	bne Clear
 
-StartOfFrame ; this is $F000
+StartOfFrame ; this is $F009
 ; start of vertical blank processing
 	lda #0
 	sta VBLANK
