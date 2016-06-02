@@ -6,6 +6,25 @@
 	ORG $F000
 
 Reset ; this is $F000
+
+; Now let's reset the cpu!
+	lda #0
+	ldx #0
+Clear
+	sta $80,x
+	inx
+	cpx #$80
+	bne Clear
+
+; And now reset the TIA
+	lda #0
+	ldx #0
+ClearTIA
+	sta $0,x
+	inx
+	cpx #$FF
+	bne ClearTIA
+
 StartOfFrame ; this is $F000
 ; start of vertical blank processing
 	lda #0
