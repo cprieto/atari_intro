@@ -22,6 +22,7 @@ StartOfFrame ; this is $F009
 	sta VBLANK
 	lda #2
 	sta VSYNC
+
 ; 3 scanlines of VSYNC signal
 	REPEAT 3
 		sta WSYNC
@@ -30,25 +31,32 @@ StartOfFrame ; this is $F009
 	sta VSYNC
 
 ; 37 vertical blank
-	REPEAT 37
-		sta WSYNC
-	REPEND
+	ldx #0
+DoVBlank
+	inx
+	sta WSYNC
+	cpx #37
+	bne DoVBlank
 
 ; 192 scanlines of picture
 	ldx #0
-	REPEAT 192
-		inx
-		stx COLUBK
-		sta WSYNC
-	REPEND
+Picture
+	inx
+	stx COLUBK
+	sta WSYNC
+	cpx #$C0 ; 192 in hex
+	bne DoScanlines
 
 	lda #%01000010
 	sta VBLANK ; end of screen
 
 ; 30 scanlines of overscan
-	REPEAT 30
-		sta WSYNC
-	REPEND
+	ldx #0
+DoOverscan
+	inx
+	sta WSYNC
+	cpx #$1E ; 30 in hex
+	bne DoOverscan
 
 	jmp StartOfFrame ; jump to beginning, $f000
 
