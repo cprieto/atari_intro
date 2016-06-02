@@ -11,10 +11,8 @@ Reset ; this is $F000
 	lda #0
 	ldx #0
 Clear
-	sta $80,x
-	sta $0,x
+	sta 0,x
 	inx
-	cpx #$80
 	bne Clear
 
 StartOfFrame ; this is $F000
