@@ -49,17 +49,18 @@ DoVBlank
 	cpx #37
 	bne DoVBlank
 
+
 ; Handle a change in the pattern every 20 frames
 ; and write the pattern to PF1
-	iny     ; increment speed count
+	iny
 	cpy #TIMETOCHANGE
 	bne NotYet
-	ldy #0   ; We reach the end, time to reset
-	inc PATTERN ; next pattern
+	ldy #0
+	inc PATTERN
 
 NotYet
-	lda PATTERN  ; use the pattern
-	sta PF1      ; as playfield
+	lda PATTERN
+	sta PF1
 
 ; 192 scanlines of picture
 	ldx #0
@@ -68,6 +69,8 @@ Picture
 	stx COLUBK
 	sta WSYNC
 	cpx #$C0 ; 192 in hex
+
+
 	bne Picture
 
 	lda #%01000010
