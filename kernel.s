@@ -17,13 +17,12 @@ Clear
 	bne Clear
 
 ; This is where we initialize stuff
-PATTERN      = $80  ; Using memory!
-TIMETOCHANGE = 20   
-COLOR        = $1E  ; Color is ugly yellow! 
+	
+	lda #$45
+	sta COLUPF     ; playfield color
 
-	lda #0
-	sta PATTERN  ; the binary PF pattern
-	ldy #0       ; speed counter
+	lda #%00000001 ; reflect playfield
+	sta CTRLPF
 
 StartOfFrame ; this is $F009
 ; start of vertical blank processing
@@ -47,32 +46,42 @@ DoVBlank
 	cpx #37
 	bne DoVBlank
 
-
-; Handle a change in the pattern every 20 frames
-; and write the pattern to PF1
-	iny
-	cpy #TIMETOCHANGE
-	bne NotYet
-	ldy #0
-	inc PATTERN
-
-NotYet
-	lda PATTERN
-	sta PF1
-
 ; 192 scanlines of picture
-	ldx #0
-	lda #$F0
-	sta COLUBK
-	lda #0
-Picture
-	inx
-	stx COLUPF
+	ldx #0         ; Line counter
 
+	lda #%11111111 ; Top wall
+	sta PF0
+	sta PF1
+	sta PF2
+
+Top8Lines
 	sta WSYNC
-	cpx #$C0 ; 192 in hex
+	inx
+	cpx #8
+	bne Top8Lines
 
-	bne Picture
+	lda #%00010000
+	sta PF0
+	lda #0
+	sta PF1
+	sta PF2
+
+MiddleLines
+	sta WSYNC
+	inx
+	cpx #184
+	bne MiddleLines
+
+	lda #%11111111
+	sta PF0
+	sta PF1
+	sta PF2
+
+Bottom8Lines
+	sta WSYNC
+	inx
+	cpx #192
+	bne Bottom8Lines
 
 	lda #%01000010
 	sta VBLANK ; end of screen
