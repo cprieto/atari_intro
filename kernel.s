@@ -2,6 +2,10 @@
 	include "vcs.h"
 	include "macro.h"
 
+	SEG.U vars    ; Variable section, BIATCHES!
+	ORG $80 
+	Variable ds 1 ; My first variable, Pedro I will call it
+
 	SEG
 	ORG $F000
 
