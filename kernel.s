@@ -23,8 +23,6 @@ COLOR        = $1E  ; Color is ugly yellow!
 
 	lda #0
 	sta PATTERN  ; the binary PF pattern
-	lda COLOR    ; Set the color
-	sta COLUPF   ; playfield color
 	ldy #0       ; speed counter
 
 StartOfFrame ; this is $F009
@@ -64,12 +62,15 @@ NotYet
 
 ; 192 scanlines of picture
 	ldx #0
+	lda #$F0
+	sta COLUBK
+	lda #0
 Picture
 	inx
-	stx COLUBK
+	stx COLUPF
+
 	sta WSYNC
 	cpx #$C0 ; 192 in hex
-
 
 	bne Picture
 
